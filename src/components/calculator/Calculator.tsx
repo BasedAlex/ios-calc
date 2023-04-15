@@ -3,6 +3,7 @@ import styles from './Calculator.module.css'
 
 export const Calculator = () => {
 	const [calc, setCalc] = useState('0')
+	const [count, setCount] = useState(0)
 
 	const onInput = (e: any) => {
 		calc !== '0'
@@ -12,6 +13,39 @@ export const Calculator = () => {
 
 	const onClear = () => {
 		setCalc('0')
+	}
+
+	const operationCalculate = (a: string, op: string, b: string) => {
+		if (op === '*') return +a * +b
+		if (op === '/') return +a / +b
+		if (op === '+') return +a + +b
+		if (op === '-') return +a - +b
+	}
+
+	const onOperationTwo = () => {
+		const stack = ['*', '/', '+', '-']
+		let i = 0
+		let result = calc
+
+		// while (i > stack.length) {
+		const arr: any = result.match(RegExp(`([0-9]+)(\\${stack[i]})([0-9]+)`))
+
+		if (arr) {
+			const t: any = operationCalculate(arr[1], arr[2], arr[3])
+			let calculated = result.replace(arr[0], t)
+			console.log('arr', arr)
+			console.log('result', t)
+			console.log('calculated', calculated)
+		} else if (!arr) {
+			i++
+		}
+		// }
+
+		// setCalc(result.toString())
+		// const re = /([0-9]+)(\*)([0-9]+)/
+
+		// const operation = '*'
+		// console.log(calc.match(RegExp(`([0-9]+)(\\${operation})([0-9]+)`)))
 	}
 
 	const onOperation = () => {
@@ -108,7 +142,7 @@ export const Calculator = () => {
 					0
 				</div>
 				<div className={styles.button__black}>.</div>
-				<div className={styles.button__black} onClick={onOperation}>
+				<div className={styles.button__black} onClick={onOperationTwo}>
 					=
 				</div>
 				<div className={styles.button__orange} onClick={e => onInput(e)}>
