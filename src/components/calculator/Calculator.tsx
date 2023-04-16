@@ -27,19 +27,21 @@ export const Calculator = () => {
 		let i = 0
 		let result = calc
 
-		// while (i > stack.length) {
-		const arr: any = result.match(RegExp(`([0-9]+)(\\${stack[i]})([0-9]+)`))
+		while (i < stack.length) {
+			const regex = result.match(RegExp(`([0-9]+)(\\${stack[i]})([0-9]+)`))
+			const arr: any = regex
 
-		if (arr) {
-			const t: any = operationCalculate(arr[1], arr[2], arr[3])
-			let calculated = result.replace(arr[0], t)
-			console.log('arr', arr)
-			console.log('result', t)
-			console.log('calculated', calculated)
-		} else if (!arr) {
-			i++
+			if (arr) {
+				const t: any = operationCalculate(arr[1], arr[2], arr[3])
+				let calculated = result.replace(arr[0], t)
+				console.log('arr', arr)
+				console.log('result', t, typeof t)
+				console.log('calculated', calculated)
+				i++
+			} else if (!arr) {
+				i++
+			}
 		}
-		// }
 
 		// setCalc(result.toString())
 		// const re = /([0-9]+)(\*)([0-9]+)/
