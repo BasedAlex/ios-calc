@@ -61,6 +61,32 @@
 	min-width: 20px;
 }
 
+.button__trigger {
+	background-color: black;
+	min-width: 25px;
+	min-height: 25px;
+}
+
+.button__rotate {
+	background: black;
+	overflow: hidden;
+	transition-duration: 0.8s;
+	transition-property: transform;
+}
+.button__rotate:hover {
+	background: black;
+	transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+}
+
+.history__wrapper {
+	background: black;
+	margin: 0;
+	color: white;
+	list-style-type: none;
+	max-width: 180px;
+}
+
 .button__black:hover {
 	background-color: #b87d7dd8;
 }
