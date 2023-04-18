@@ -4,6 +4,8 @@ import styles from './Calculator.module.css'
 export const Calculator = () => {
 	const [calc, setCalc] = useState('0')
 	const [count, setCount] = useState(0)
+	const [openhistory, setOpenhistory] = useState(false)
+	const [history, setHistory] = useState<string[]>([])
 
 	const onInput = (e: any) => {
 		calc !== '0'
@@ -33,60 +35,61 @@ export const Calculator = () => {
 
 			if (arr) {
 				const t: any = operationCalculate(arr[1], arr[2], arr[3])
-				let calculated = result.replace(arr[0], t)
+				result = result.replace(arr[0], t)
 				console.log('arr', arr)
 				console.log('result', t, typeof t)
-				console.log('calculated', calculated)
-				i++
 			} else if (!arr) {
 				i++
 			}
+			setCalc(result.toString())
+			setHistory([...history, calc + '=' + result])
 		}
-
-		// setCalc(result.toString())
-		// const re = /([0-9]+)(\*)([0-9]+)/
-
-		// const operation = '*'
-		// console.log(calc.match(RegExp(`([0-9]+)(\\${operation})([0-9]+)`)))
 	}
 
-	const onOperation = () => {
-		if (calc.includes('+')) {
-			const index = calc.indexOf('+')
-			const result =
-				Number(calc.slice(0, index)) +
-				Number(calc.slice(index + 1, calc.length))
-			setCalc(result.toString())
+	const handleDelete = (e: any) => {
+		if (e.code === 'Backspace' && calc.length > 1) {
+			setCalc(calc.slice(-calc.length, calc.length - 1))
 		}
-
-		if (calc.includes('-')) {
-			const index = calc.indexOf('-')
-			const result =
-				Number(calc.slice(0, index)) -
-				Number(calc.slice(index + 1, calc.length))
-			setCalc(result.toString())
-		}
-
-		if (calc.includes('*')) {
-			const index = calc.indexOf('*')
-			const result =
-				Number(calc.slice(0, index)) *
-				Number(calc.slice(index + 1, calc.length))
-			setCalc(result.toString())
-		}
-
-		if (calc.includes('/')) {
-			const index = calc.indexOf('/')
-			const result =
-				Number(calc.slice(0, index)) /
-				Number(calc.slice(index + 1, calc.length))
-			setCalc(result.toString())
+		if (e.code === 'Backspace' && calc.length === 1) {
+			setCalc('0')
 		}
 	}
 
 	return (
-		<>
-			<div className={styles.display}>{calc}</div>
+		<div tabIndex={0} onKeyUpCapture={e => handleDelete(e)}>
+			<div className={styles.display}>
+				<button
+					className={(styles.button__trigger, styles.button__rotate)}
+					onClick={() => setOpenhistory(!openhistory)}
+				>
+					{' '}
+					<svg
+						fill='white'
+						height='20px'
+						width='20px'
+						version='1.1'
+						id='Layer_1'
+						xmlns='http://www.w3.org/2000/svg'
+						viewBox='0 0 330 330'
+					>
+						<path
+							id='XMLID_224_'
+							d='M325.606,229.393l-150.004-150C172.79,76.58,168.974,75,164.996,75c-3.979,0-7.794,1.581-10.607,4.394
+	l-149.996,150c-5.858,5.858-5.858,15.355,0,21.213c5.857,5.857,15.355,5.858,21.213,0l139.39-139.393l139.397,139.393
+	C307.322,253.536,311.161,255,315,255c3.839,0,7.678-1.464,10.607-4.394C331.464,244.748,331.464,235.251,325.606,229.393z'
+						/>
+					</svg>
+				</button>
+
+				<div>{calc}</div>
+			</div>
+			{openhistory ? (
+				<ul className={styles.history__wrapper}>
+					{history.map(w => (
+						<li className={styles.history}>{w}</li>
+					))}
+				</ul>
+			) : null}
 			<div className={styles.wrapper}>
 				<div className={styles.button__grey} onClick={e => onInput(e)}>
 					(
@@ -151,6 +154,6 @@ export const Calculator = () => {
 					/
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }
