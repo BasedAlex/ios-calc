@@ -24,10 +24,24 @@ export const Calculator = () => {
 		if (op === '-') return +a - +b
 	}
 
+	const onParentases = (str: string) => {
+		console.log('>>>', str)
+		if (str.includes('(') || str.includes(')')) {
+			const re = /\(.+\)/
+			return str.replace(re, (match: any, i: any) => {
+				const newstr = match.slice(1, match.length - 1)
+				const prefix = newstr.slice(0, newstr.indexOf('('))
+				const postfix = newstr.slice(newstr.indexOf('('))
+				return operationCalculate(prefix + onParentases(postfix))
+			})
+		}
+		return str
+	}
+
 	const onOperationTwo = () => {
 		const stack = ['*', '/', '+', '-']
 		let i = 0
-		let result = calc
+		let result = onParentases(calc)
 
 		while (i < stack.length) {
 			const regex = result.match(RegExp(`([0-9]+)(\\${stack[i]})([0-9]+)`))
